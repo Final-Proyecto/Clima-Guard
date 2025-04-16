@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap");
+
+/* Fuente personalizada */
+.title-special {
+  font-family: "Special Gothic Expanded One", sans-serif;
+}
+
+/* Texto con degradado animado naranja */
+.text-animated-gradient {
+  background: linear-gradient(270deg, #ff6600, #ffa600, #ff6600);
+  background-size: 600% 600%;
+  animation: gradient-move 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animación del degradado */
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Flecha animada tipo "latido" */
+.arrow-bounce {
+  animation: heartbeat 1.2s infinite;
+}
+
+@keyframes heartbeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+/* Contenedor oculto y que aparece con animación hacia abajo */
+.slide-down-enter {
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.6s ease-in-out;
+  overflow: hidden;
+}
+
+.slide-down-enter-active {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.transparent-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.transparent-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Botón de formulario */
+.btn-registrarse {
+  background-color: #ff6600;
+  color: white;
+  padding: 0.75rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+.btn-registrarse:hover {
+  background-color: #cc5200;
+}
