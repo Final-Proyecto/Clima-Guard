@@ -5,7 +5,16 @@ import {
   Provincia,
   Localidad,
 } from "../api/Registro";
-import { FaUser, FaEnvelope, FaLock, FaMapMarkedAlt } from "react-icons/fa";
+import {
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaMapMarkedAlt,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom"; // asegúrate de usar react-router-dom
 import "../css/Register.css";
 
 const Register: React.FC = () => {
@@ -13,10 +22,11 @@ const Register: React.FC = () => {
   const [localidades, setLocalidades] = useState<Localidad[]>([]);
   const [selectedProvincia, setSelectedProvincia] = useState<string>("");
   const [selectedLocalidad, setSelectedLocalidad] = useState<string>("");
-
-  const [nombre, setNombre] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [contraseña, setContraseña] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [formVisible, setFormVisble] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProvincias = async () => {
@@ -40,39 +50,55 @@ const Register: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos del Formulario:", {
-      provincia: selectedProvincia,
-      localidad: selectedLocalidad,
-      nombre,
+    console.log("Form Data:", {
+      province: selectedProvincia,
+      city: selectedLocalidad,
+      name,
       email,
-      contraseña,
+      password,
     });
   };
 
+  const toggleForm = () => setFormVisble((prev) => !prev);
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-10">
-      {/* Título con animación */}
       <h1 className="text-5xl sm:text-6xl text-center mb-10 title-special text-animated-gradient">
-        Formulario
+        REGISTER
       </h1>
 
-      {/* Contenedor del formulario con efecto glass */}
-      <div className="transparent-card w-full max-w-md">
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Nombre */}
+      <div
+        className="flex justify-center mb-6 cursor-pointer"
+        onClick={toggleForm}
+      >
+        {formVisible ? (
+          <FaChevronUp className="text-orange-500 text-4xl arrow-bounce" />
+        ) : (
+          <FaChevronDown className="text-orange-500 text-4xl arrow-bounce" />
+        )}
+      </div>
+
+      <div
+        className={`transition-all duration-700 ease-in-out overflow-hidden ${
+          formVisible ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="backdrop-blur-lg bg-white/10 p-8 rounded-2xl shadow-lg space-y-5 w-full max-w-md"
+        >
           <div className="flex items-center border-b border-white/40 pb-2">
             <FaUser className="text-white/70 mr-3" />
             <input
               type="text"
               className="w-full bg-transparent border-none outline-none placeholder-white/70 text-white"
-              placeholder="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
 
-          {/* Email */}
           <div className="flex items-center border-b border-white/40 pb-2">
             <FaEnvelope className="text-white/70 mr-3" />
             <input
@@ -85,20 +111,18 @@ const Register: React.FC = () => {
             />
           </div>
 
-          {/* Contraseña */}
           <div className="flex items-center border-b border-white/40 pb-2">
             <FaLock className="text-white/70 mr-3" />
             <input
               type="password"
               className="w-full bg-transparent border-none outline-none placeholder-white/70 text-white"
-              placeholder="Contraseña"
-              value={contraseña}
-              onChange={(e) => setContraseña(e.target.value)}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          {/* Provincia */}
           <div className="flex items-center border-b border-white/40 pb-2">
             <FaMapMarkedAlt className="text-white/70 mr-3" />
             <select
@@ -107,7 +131,7 @@ const Register: React.FC = () => {
               onChange={(e) => setSelectedProvincia(e.target.value)}
             >
               <option className="text-black" value="">
-                Selecciona una provincia
+                Select a province
               </option>
               {provincias.map((provincia) => (
                 <option
@@ -121,7 +145,6 @@ const Register: React.FC = () => {
             </select>
           </div>
 
-          {/* Localidad */}
           <div className="flex items-center border-b border-white/40 pb-2">
             <FaMapMarkedAlt className="text-white/70 mr-3" />
             <select
@@ -131,7 +154,7 @@ const Register: React.FC = () => {
               onChange={(e) => setSelectedLocalidad(e.target.value)}
             >
               <option className="text-black" value="">
-                Selecciona una localidad
+                Select a city
               </option>
               {localidades.map((localidad) => (
                 <option
@@ -145,16 +168,33 @@ const Register: React.FC = () => {
             </select>
           </div>
 
-          {/* Botón */}
-          <button type="submit" className="btn-registrarse">
-            Registrarse
+          <button
+            type="submit"
+            className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition-colors"
+          >
+            Register
           </button>
-        </form>
 
-        {/* Flecha que late debajo del formulario */}
-        <div className="flex justify-center mt-6 text-orange-500 text-4xl arrow-bounce">
-          ↓
-        </div>
+          <div className="text-center text-white/70 mt-4">
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-orange-400 hover:underline cursor-pointer"
+            >
+              Login
+            </span>
+          </div>
+
+          <div className="flex items-center justify-center mt-4">
+            <button
+              type="button"
+              className="flex items-center gap-2 bg-white text-black font-medium py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <FcGoogle className="text-xl" />
+              Sign in with Google
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
